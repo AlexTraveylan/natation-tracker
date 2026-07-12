@@ -35,7 +35,7 @@ Toutes ces variables sont lues côté serveur (`process.env`), aucune n'est expo
 
 ## Arborescence complète
 
-\`\`\`
+```
 natation/
 ├── doc/ # Documentation orientée LLM (ce dossier)
 │ ├── index.md
@@ -90,11 +90,11 @@ natation/
 ├── vite.config.ts
 ├── tsconfig.json / tsconfig.app.json / tsconfig.node.json / tsconfig.server.json
 └── .husky/pre-commit
-\`\`\`
+```
 
 ## Data flow principal
 
-\`\`\`
+```
 main.tsx
 └── App.tsx (QueryClientProvider > BrowserRouter > Routes)
 ├── Home.tsx → useObjectifs/useSwimResults/useEntrainement (src/hooks/api.ts)
@@ -104,11 +104,11 @@ main.tsx
 src/lib/api-client.ts (fetch + validation zod)
 │
 ▼
-api/_.ts (fonctions Vercel, une par route HTTP)
+api/*.ts (fonctions Vercel, une par route HTTP)
 │
 ▼
 server/composition.ts (storage, llm, activityProvider)
 │
 ▼
-server/ports/_.port.ts ←implements— server/adapters/**/*.adapter.ts
-\`\`\`
+server/ports/*.port.ts ←implements— server/adapters/**/*.adapter.ts
+```
