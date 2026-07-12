@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { DISTANCES, type Distance } from '@shared/domain';
 import { useEntrainement, useObjectifs, useSwimResults } from '@/hooks/api';
-import { DistanceLineChart } from '@/components/distance-line-chart';
+import { DistanceBarChart } from '@/components/distance-bar-chart';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Select,
@@ -55,10 +55,7 @@ export default function Home() {
           {swimResultsQuery.isLoading ? (
             <p className="text-sm text-muted-foreground">Chargement…</p>
           ) : (
-            <DistanceLineChart
-              results={results}
-              objectifTimeSeconds={objectif?.targetTimeSeconds}
-            />
+            <DistanceBarChart results={results} objectifTimeSeconds={objectif?.targetTimeSeconds} />
           )}
         </CardContent>
       </Card>

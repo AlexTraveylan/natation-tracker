@@ -1,4 +1,4 @@
-import { CartesianGrid, Line, LineChart, ReferenceLine, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, CartesianGrid, ReferenceLine, XAxis, YAxis } from 'recharts';
 import type { SwimResults } from '@shared/domain';
 import { formatTime } from '@shared/format';
 import {
@@ -15,12 +15,14 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-interface DistanceLineChartProps {
+interface DistanceBarChartProps {
   results: SwimResults;
   objectifTimeSeconds?: number;
 }
 
-export function DistanceLineChart({ results, objectifTimeSeconds }: DistanceLineChartProps) {
+const MIN_PADDING_SECONDS = 2;
+
+export function DistanceBarChart({ results, objectifTimeSeconds }: DistanceBarChartProps) {
   const data = [...results]
     .sort((a, b) => a.date.localeCompare(b.date))
     .map((r) => ({
@@ -39,16 +41,24 @@ export function DistanceLineChart({ results, objectifTimeSeconds }: DistanceLine
     );
   }
 
+  const values = data
+    .map((d) => d.temps)
+    .concat(objectifTimeSeconds !== undefined ? [objectifTimeSeconds] : []);
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const padding = Math.max((max - min) * 0.1, MIN_PADDING_SECONDS);
+  const domain: [number, number] = [min - padding, max + padding];
+
   return (
     <ChartContainer config={chartConfig} className="w-full">
-      <LineChart data={data} margin={{ left: 12, right: 12, top: 12 }}>
+      <BarChart data={data} margin={{ left: 12, right: 12, top: 12 }}>
         <CartesianGrid vertical={false} />
-        <XAxis dataKey="date" tickLine={false} axisLine={false} />
+        <XAxis dataKey="date" tickLine={false} axisLine={false} tick={false} />
         <YAxis
           tickLine={false}
           axisLine={false}
           tickFormatter={(value: number) => formatTime(value)}
-          domain={['dataMin - 5', 'dataMax + 5']}
+          domain={domain}
         />
         <ChartTooltip
           content={<ChartTooltipContent formatter={(value) => formatTime(Number(value))} />}
@@ -66,8 +76,8 @@ export function DistanceLineChart({ results, objectifTimeSeconds }: DistanceLine
             }}
           />
         )}
-        <Line dataKey="temps" type="monotone" stroke="var(--color-temps)" strokeWidth={2} dot />
-      </LineChart>
+        <Bar dataKey="temps" fill="var(--color-temps)" radius={[4, 4, 0, 0]} />
+      </BarChart>
     </ChartContainer>
   );
 }

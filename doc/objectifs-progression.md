@@ -5,7 +5,7 @@ Route : `/` (`src/pages/Home.tsx`).
 ## Contenu
 
 - Sélecteur de distance (`50`, `100`, `200`, `400`, `800` — `DISTANCES` dans `shared/domain.ts`), état local via `useState<Distance>`.
-- Carte "Progression" : `DistanceLineChart` (`src/components/distance-line-chart.tsx`, recharts) affichant les résultats filtrés par distance (`useSwimResults`) avec une ligne d'objectif (`useObjectifs`, champ `targetTimeSeconds`).
+- Carte "Progression" : `DistanceBarChart` (`src/components/distance-bar-chart.tsx`, recharts) affichant chaque tentative filtrée par distance (`useSwimResults`) comme une barre distincte (plusieurs tentatives possibles le même jour), avec une ligne d'objectif (`useObjectifs`, champ `targetTimeSeconds`).
 - Carte "Dernier entraînement généré" : affiche `useEntrainement().data.content` ou un message d'invitation à se rendre dans les réglages.
 
 ## Hooks utilisés (`src/hooks/api.ts`)
