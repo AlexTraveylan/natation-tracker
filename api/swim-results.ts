@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { storage, activityProvider } from "../server/composition";
+import { storage, activityProvider } from "../server/composition.js";
 
 const TTL_MS = 60 * 60 * 1000; // 1h : évite de re-solliciter Strava à chaque chargement de page
 

@@ -7,8 +7,8 @@ import {
   type Entrainement,
   type Objectifs,
   type SwimResultsCache,
-} from "../../../shared/domain";
-import type { StoragePort } from "../../ports/storage.port";
+} from "../../../shared/domain.js";
+import type { StoragePort } from "../../ports/storage.port.js";
 
 const KEYS = {
   objectifs: "objectifs",

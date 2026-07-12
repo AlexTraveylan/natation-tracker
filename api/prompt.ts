@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { promptSchema } from "../shared/domain";
-import { storage } from "../server/composition";
-import { isAuthorized } from "../server/auth";
+import { promptSchema } from "../shared/domain.js";
+import { storage } from "../server/composition.js";
+import { isAuthorized } from "../server/auth.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!isAuthorized(req.headers["x-settings-password"] as string | undefined)) {

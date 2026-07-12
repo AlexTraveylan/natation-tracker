@@ -1,4 +1,4 @@
-import type { LlmPort } from "../../ports/llm.port";
+import type { LlmPort } from "../../ports/llm.port.js";
 
 export class OpenAiLlmAdapter implements LlmPort {
   async generateText(prompt: string): Promise<string> {

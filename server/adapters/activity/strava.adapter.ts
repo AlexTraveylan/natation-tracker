@@ -1,6 +1,6 @@
-import type { Distance, SwimResults } from "../../../shared/domain";
-import { DISTANCES } from "../../../shared/domain";
-import type { ActivityProviderPort } from "../../ports/activity.port";
+import type { Distance, SwimResults } from "../../../shared/domain.js";
+import { DISTANCES } from "../../../shared/domain.js";
+import type { ActivityProviderPort } from "../../ports/activity.port.js";
 
 const MAX_ACTIVITIES = 30;
 const DISTANCE_TOLERANCE = 0.05; // ±5%

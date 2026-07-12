@@ -1,6 +1,6 @@
-import { EdgeConfigStorageAdapter } from "./adapters/storage/edgeConfig.adapter";
-import { OpenAiLlmAdapter } from "./adapters/llm/openai.adapter";
-import { StravaActivityAdapter } from "./adapters/activity/strava.adapter";
+import { EdgeConfigStorageAdapter } from "./adapters/storage/edgeConfig.adapter.js";
+import { OpenAiLlmAdapter } from "./adapters/llm/openai.adapter.js";
+import { StravaActivityAdapter } from "./adapters/activity/strava.adapter.js";
 
 export const storage = new EdgeConfigStorageAdapter();
 export const llm = new OpenAiLlmAdapter();

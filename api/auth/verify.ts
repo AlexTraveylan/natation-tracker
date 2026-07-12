@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { authSchema } from "../../shared/domain";
-import { isAuthorized } from "../../server/auth";
+import { authSchema } from "../../shared/domain.js";
+import { isAuthorized } from "../../server/auth.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") {
