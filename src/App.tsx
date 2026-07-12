@@ -1,7 +1,7 @@
-import { Route, Routes } from 'react-router-dom'
-import { Toaster } from '@/components/ui/sonner'
-import Home from '@/pages/Home'
-import Settings from '@/pages/Settings'
+import { Route, Routes } from 'react-router-dom';
+import { Toaster } from '@/components/ui/sonner';
+import Home from '@/pages/Home';
+import Settings from '@/pages/Settings';
 
 function App() {
   return (
@@ -12,7 +12,7 @@ function App() {
       </Routes>
       <Toaster />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

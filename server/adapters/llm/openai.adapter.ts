@@ -1,22 +1,22 @@
-import type { LlmPort } from "../../ports/llm.port.js";
+import type { LlmPort } from '../../ports/llm.port.js';
 
 export class OpenAiLlmAdapter implements LlmPort {
   async generateText(prompt: string): Promise<string> {
     const apiKey = process.env.OPENAI_API_KEY;
-    const model = process.env.OPENAI_MODEL ?? "gpt-4o-mini";
+    const model = process.env.OPENAI_MODEL ?? 'gpt-4o-mini';
     if (!apiKey) {
       throw new Error("OPENAI_API_KEY manquant dans les variables d'environnement");
     }
 
-    const res = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
+    const res = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
       headers: {
         Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         model,
-        messages: [{ role: "user", content: prompt }],
+        messages: [{ role: 'user', content: prompt }],
       }),
     });
 
@@ -29,8 +29,8 @@ export class OpenAiLlmAdapter implements LlmPort {
       choices?: { message?: { content?: string } }[];
     };
     const content = data.choices?.[0]?.message?.content;
-    if (typeof content !== "string") {
-      throw new Error("Réponse OpenAI invalide (pas de contenu)");
+    if (typeof content !== 'string') {
+      throw new Error('Réponse OpenAI invalide (pas de contenu)');
     }
     return content;
   }

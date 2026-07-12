@@ -1,4 +1,4 @@
-const STORAGE_KEY = "settings-password";
+const STORAGE_KEY = 'settings-password';
 
 export function getStoredPassword(): string | null {
   return sessionStorage.getItem(STORAGE_KEY);

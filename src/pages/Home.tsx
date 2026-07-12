@@ -1,29 +1,27 @@
-import { useState } from "react"
-import { Link } from "react-router-dom"
-import { DISTANCES, type Distance } from "@shared/domain"
-import { useEntrainement, useObjectifs, useSwimResults } from "@/hooks/api"
-import { DistanceLineChart } from "@/components/distance-line-chart"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { DISTANCES, type Distance } from '@shared/domain';
+import { useEntrainement, useObjectifs, useSwimResults } from '@/hooks/api';
+import { DistanceLineChart } from '@/components/distance-line-chart';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Button } from "@/components/ui/button"
+} from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
 
 export default function Home() {
-  const [distance, setDistance] = useState<Distance>(100)
+  const [distance, setDistance] = useState<Distance>(100);
 
-  const objectifsQuery = useObjectifs()
-  const swimResultsQuery = useSwimResults()
-  const entrainementQuery = useEntrainement()
+  const objectifsQuery = useObjectifs();
+  const swimResultsQuery = useSwimResults();
+  const entrainementQuery = useEntrainement();
 
-  const objectif = objectifsQuery.data?.find((o) => o.distance === distance)
-  const results = (swimResultsQuery.data ?? []).filter(
-    (r) => r.distance === distance,
-  )
+  const objectif = objectifsQuery.data?.find((o) => o.distance === distance);
+  const results = (swimResultsQuery.data ?? []).filter((r) => r.distance === distance);
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-6 p-6">
@@ -78,12 +76,12 @@ export default function Home() {
             </pre>
           ) : (
             <p className="text-sm text-muted-foreground">
-              Aucun entraînement généré pour le moment. Rends-toi dans les
-              réglages pour en générer un.
+              Aucun entraînement généré pour le moment. Rends-toi dans les réglages pour en générer
+              un.
             </p>
           )}
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
-import { toast } from "sonner"
-import { DISTANCES, type Distance, type Objectifs } from "@shared/domain"
-import { formatTime, parseTime } from "@shared/format"
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { toast } from 'sonner';
+import { DISTANCES, type Distance, type Objectifs } from '@shared/domain';
+import { formatTime, parseTime } from '@shared/format';
 import {
   useEntrainement,
   useGenerateEntrainement,
@@ -11,27 +11,27 @@ import {
   useSetObjectifs,
   useSetPrompt,
   useVerifyPassword,
-} from "@/hooks/api"
-import { getStoredPassword } from "@/lib/settings-auth"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
+} from '@/hooks/api';
+import { getStoredPassword } from '@/lib/settings-auth';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 
 function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
-  const [password, setPassword] = useState("")
-  const verify = useVerifyPassword()
+  const [password, setPassword] = useState('');
+  const verify = useVerifyPassword();
 
   function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
+    e.preventDefault();
     verify.mutate(password, {
       onSuccess: (ok) => {
-        if (ok) onUnlock()
-        else toast.error("Mot de passe incorrect")
+        if (ok) onUnlock();
+        else toast.error('Mot de passe incorrect');
       },
-      onError: () => toast.error("Erreur de vérification"),
-    })
+      onError: () => toast.error('Erreur de vérification'),
+    });
   }
 
   return (
@@ -47,49 +47,47 @@ function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
           autoFocus
         />
         <Button type="submit" disabled={verify.isPending}>
-          {verify.isPending ? "Vérification…" : "Déverrouiller"}
+          {verify.isPending ? 'Vérification…' : 'Déverrouiller'}
         </Button>
       </form>
       <Link to="/" className="text-sm text-muted-foreground underline">
         Retour aux graphs
       </Link>
     </div>
-  )
+  );
 }
 
 function ObjectifsEditor() {
-  const objectifsQuery = useObjectifs()
-  const setObjectifs = useSetObjectifs()
-  const [values, setValues] = useState<Record<Distance, string>>(
-    {} as Record<Distance, string>,
-  )
+  const objectifsQuery = useObjectifs();
+  const setObjectifs = useSetObjectifs();
+  const [values, setValues] = useState<Record<Distance, string>>({} as Record<Distance, string>);
 
   useEffect(() => {
-    if (!objectifsQuery.data) return
-    const next = {} as Record<Distance, string>
+    if (!objectifsQuery.data) return;
+    const next = {} as Record<Distance, string>;
     for (const d of DISTANCES) {
-      const found = objectifsQuery.data.find((o) => o.distance === d)
-      next[d] = found ? formatTime(found.targetTimeSeconds) : ""
+      const found = objectifsQuery.data.find((o) => o.distance === d);
+      next[d] = found ? formatTime(found.targetTimeSeconds) : '';
     }
-    setValues(next)
-  }, [objectifsQuery.data])
+    setValues(next);
+  }, [objectifsQuery.data]);
 
   function handleSave() {
-    const objectifs: Objectifs = []
+    const objectifs: Objectifs = [];
     for (const d of DISTANCES) {
-      const raw = values[d]?.trim()
-      if (!raw) continue
-      const seconds = parseTime(raw)
+      const raw = values[d]?.trim();
+      if (!raw) continue;
+      const seconds = parseTime(raw);
       if (seconds === null) {
-        toast.error(`Temps invalide pour ${d}m (format attendu mm:ss)`)
-        return
+        toast.error(`Temps invalide pour ${d}m (format attendu mm:ss)`);
+        return;
       }
-      objectifs.push({ distance: d, targetTimeSeconds: seconds })
+      objectifs.push({ distance: d, targetTimeSeconds: seconds });
     }
     setObjectifs.mutate(objectifs, {
-      onSuccess: () => toast.success("Objectifs enregistrés"),
+      onSuccess: () => toast.success('Objectifs enregistrés'),
       onError: () => toast.error("Échec de l'enregistrement"),
-    })
+    });
   }
 
   return (
@@ -103,50 +101,41 @@ function ObjectifsEditor() {
             <Label className="w-16 shrink-0">{d} m</Label>
             <Input
               placeholder="mm:ss"
-              value={values[d] ?? ""}
-              onChange={(e) =>
-                setValues((prev) => ({ ...prev, [d]: e.target.value }))
-              }
+              value={values[d] ?? ''}
+              onChange={(e) => setValues((prev) => ({ ...prev, [d]: e.target.value }))}
             />
           </div>
         ))}
-        <Button
-          onClick={handleSave}
-          disabled={setObjectifs.isPending}
-          className="self-start"
-        >
-          {setObjectifs.isPending ? "Enregistrement…" : "Enregistrer"}
+        <Button onClick={handleSave} disabled={setObjectifs.isPending} className="self-start">
+          {setObjectifs.isPending ? 'Enregistrement…' : 'Enregistrer'}
         </Button>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 function PromptEditor() {
-  const promptQuery = usePrompt()
-  const setPrompt = useSetPrompt()
-  const generate = useGenerateEntrainement()
-  const [value, setValue] = useState("")
+  const promptQuery = usePrompt();
+  const setPrompt = useSetPrompt();
+  const generate = useGenerateEntrainement();
+  const [value, setValue] = useState('');
 
   useEffect(() => {
-    if (promptQuery.data !== undefined) setValue(promptQuery.data)
-  }, [promptQuery.data])
+    if (promptQuery.data !== undefined) setValue(promptQuery.data);
+  }, [promptQuery.data]);
 
   function handleSave() {
     setPrompt.mutate(value, {
-      onSuccess: () => toast.success("Prompt enregistré"),
+      onSuccess: () => toast.success('Prompt enregistré'),
       onError: () => toast.error("Échec de l'enregistrement"),
-    })
+    });
   }
 
   function handleGenerate() {
     generate.mutate(undefined, {
-      onSuccess: () => toast.success("Entraînement généré"),
-      onError: (err) =>
-        toast.error(
-          err instanceof Error ? err.message : "Échec de la génération",
-        ),
-    })
+      onSuccess: () => toast.success('Entraînement généré'),
+      onError: (err) => toast.error(err instanceof Error ? err.message : 'Échec de la génération'),
+    });
   }
 
   return (
@@ -155,31 +144,23 @@ function PromptEditor() {
         <CardTitle>Prompt de génération d'entraînement</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
-        <Textarea
-          rows={8}
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-        />
+        <Textarea rows={8} value={value} onChange={(e) => setValue(e.target.value)} />
         <div className="flex gap-3">
-          <Button
-            variant="outline"
-            onClick={handleSave}
-            disabled={setPrompt.isPending}
-          >
-            {setPrompt.isPending ? "Enregistrement…" : "Enregistrer le prompt"}
+          <Button variant="outline" onClick={handleSave} disabled={setPrompt.isPending}>
+            {setPrompt.isPending ? 'Enregistrement…' : 'Enregistrer le prompt'}
           </Button>
           <Button onClick={handleGenerate} disabled={generate.isPending}>
-            {generate.isPending ? "Génération…" : "Générer un entraînement"}
+            {generate.isPending ? 'Génération…' : 'Générer un entraînement'}
           </Button>
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 function LastEntrainement() {
-  const entrainementQuery = useEntrainement()
-  if (!entrainementQuery.data) return null
+  const entrainementQuery = useEntrainement();
+  if (!entrainementQuery.data) return null;
 
   return (
     <Card>
@@ -192,7 +173,7 @@ function LastEntrainement() {
         </pre>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 function SettingsForm() {
@@ -208,15 +189,15 @@ function SettingsForm() {
       <PromptEditor />
       <LastEntrainement />
     </div>
-  )
+  );
 }
 
 export default function Settings() {
-  const [unlocked, setUnlocked] = useState(() => getStoredPassword() !== null)
+  const [unlocked, setUnlocked] = useState(() => getStoredPassword() !== null);
 
   if (!unlocked) {
-    return <PasswordGate onUnlock={() => setUnlocked(true)} />
+    return <PasswordGate onUnlock={() => setUnlocked(true)} />;
   }
 
-  return <SettingsForm />
+  return <SettingsForm />;
 }

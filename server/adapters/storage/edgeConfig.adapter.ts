@@ -1,4 +1,4 @@
-import { get } from "@vercel/edge-config";
+import { get } from '@vercel/edge-config';
 import {
   DEFAULT_PROMPT,
   entrainementSchema,
@@ -7,14 +7,14 @@ import {
   type Entrainement,
   type Objectifs,
   type SwimResultsCache,
-} from "../../../shared/domain.js";
-import type { StoragePort } from "../../ports/storage.port.js";
+} from '../../../shared/domain.js';
+import type { StoragePort } from '../../ports/storage.port.js';
 
 const KEYS = {
-  objectifs: "objectifs",
-  prompt: "prompt",
-  lastEntrainement: "lastEntrainement",
-  swimResults: "swimResults",
+  objectifs: 'objectifs',
+  prompt: 'prompt',
+  lastEntrainement: 'lastEntrainement',
+  swimResults: 'swimResults',
 } as const;
 
 // L'écriture n'est pas possible via le SDK @vercel/edge-config (lecture seule,
@@ -24,33 +24,27 @@ async function edgeConfigWrite(key: string, value: unknown): Promise<void> {
   const edgeConfigId = process.env.EDGE_CONFIG_ID;
   const token = process.env.VERCEL_API_TOKEN;
   if (!edgeConfigId || !token) {
-    throw new Error(
-      "EDGE_CONFIG_ID et VERCEL_API_TOKEN sont requis pour écrire dans Edge Config",
-    );
+    throw new Error('EDGE_CONFIG_ID et VERCEL_API_TOKEN sont requis pour écrire dans Edge Config');
   }
 
   const teamId = process.env.VERCEL_TEAM_ID;
-  const url = new URL(
-    `https://api.vercel.com/v1/edge-config/${edgeConfigId}/items`,
-  );
-  if (teamId) url.searchParams.set("teamId", teamId);
+  const url = new URL(`https://api.vercel.com/v1/edge-config/${edgeConfigId}/items`);
+  if (teamId) url.searchParams.set('teamId', teamId);
 
   const res = await fetch(url, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      items: [{ operation: "upsert", key, value }],
+      items: [{ operation: 'upsert', key, value }],
     }),
   });
 
   if (!res.ok) {
     const body = await res.text();
-    throw new Error(
-      `Échec de l'écriture Edge Config (${res.status}): ${body}`,
-    );
+    throw new Error(`Échec de l'écriture Edge Config (${res.status}): ${body}`);
   }
 }
 
@@ -67,7 +61,7 @@ export class EdgeConfigStorageAdapter implements StoragePort {
 
   async getPrompt(): Promise<string> {
     const raw = await get(KEYS.prompt);
-    return typeof raw === "string" && raw.length > 0 ? raw : DEFAULT_PROMPT;
+    return typeof raw === 'string' && raw.length > 0 ? raw : DEFAULT_PROMPT;
   }
 
   async setPrompt(prompt: string): Promise<void> {
@@ -81,10 +75,7 @@ export class EdgeConfigStorageAdapter implements StoragePort {
   }
 
   async setLastEntrainement(entrainement: Entrainement): Promise<void> {
-    await edgeConfigWrite(
-      KEYS.lastEntrainement,
-      entrainementSchema.parse(entrainement),
-    );
+    await edgeConfigWrite(KEYS.lastEntrainement, entrainementSchema.parse(entrainement));
   }
 
   async getSwimResultsCache(): Promise<SwimResultsCache | null> {

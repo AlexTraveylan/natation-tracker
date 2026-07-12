@@ -1,4 +1,4 @@
-import { timingSafeEqual } from "node:crypto";
+import { timingSafeEqual } from 'node:crypto';
 
 export function isAuthorized(providedPassword: string | undefined): boolean {
   const expected = process.env.SETTINGS_PASSWORD;

@@ -1,17 +1,17 @@
-import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { randomUUID } from "node:crypto";
-import type { Entrainement } from "../../shared/domain.js";
-import { formatTime } from "../../shared/format.js";
-import { storage, llm } from "../../server/composition.js";
-import { isAuthorized } from "../../server/auth.js";
+import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { randomUUID } from 'node:crypto';
+import type { Entrainement } from '../../shared/domain.js';
+import { formatTime } from '../../shared/format.js';
+import { storage, llm } from '../../server/composition.js';
+import { isAuthorized } from '../../server/auth.js';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== "POST") {
-    res.status(405).json({ error: "Méthode non supportée" });
+  if (req.method !== 'POST') {
+    res.status(405).json({ error: 'Méthode non supportée' });
     return;
   }
-  if (!isAuthorized(req.headers["x-settings-password"] as string | undefined)) {
-    res.status(401).json({ error: "Non autorisé" });
+  if (!isAuthorized(req.headers['x-settings-password'] as string | undefined)) {
+    res.status(401).json({ error: 'Non autorisé' });
     return;
   }
 
@@ -25,11 +25,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       ? [...objectifs]
           .sort((a, b) => a.distance - b.distance)
           .map((o) => `${o.distance}m : ${formatTime(o.targetTimeSeconds)}`)
-          .join("\n")
-      : "Aucun objectif défini.";
+          .join('\n')
+      : 'Aucun objectif défini.';
 
-  const finalPrompt = promptTemplate.includes("{objectifs}")
-    ? promptTemplate.replace("{objectifs}", objectifsText)
+  const finalPrompt = promptTemplate.includes('{objectifs}')
+    ? promptTemplate.replace('{objectifs}', objectifsText)
     : `${promptTemplate}\n\nObjectifs :\n${objectifsText}`;
 
   let content: string;

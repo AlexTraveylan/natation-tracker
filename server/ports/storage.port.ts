@@ -1,4 +1,4 @@
-import type { Entrainement, Objectifs, SwimResultsCache } from "../../shared/domain.js";
+import type { Entrainement, Objectifs, SwimResultsCache } from '../../shared/domain.js';
 
 export interface StoragePort {
   getObjectifs(): Promise<Objectifs>;
