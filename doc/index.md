@@ -24,7 +24,7 @@ Règles TypeScript, pattern ports/adapters (avec exemples réels), règle sur le
 
 ### [objectifs-progression.md](objectifs-progression.md)
 
-Page `Home` : sélecteur de distance, graphique de progression (`DistanceLineChart`), objectifs de temps.
+Page `Home` : sélecteur de distance, graphique de progression (`DistanceBarChart`), objectifs de temps.
 → Read when: modifier l'affichage de la progression, ajouter une distance, changer le format des temps.
 
 ### [entrainement-llm.md](entrainement-llm.md)

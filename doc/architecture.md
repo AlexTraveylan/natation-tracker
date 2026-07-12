@@ -82,7 +82,7 @@ natation/
 │ │ ├── settings-auth.ts # Stockage du mot de passe en sessionStorage
 │ │ └── utils.ts # cn() (clsx + tailwind-merge)
 │ ├── components/
-│ │ ├── distance-line-chart.tsx # Graphique de progression (recharts)
+│ │ ├── distance-bar-chart.tsx # Graphique de progression en barres (recharts)
 │ │ └── ui/ # Composants shadcn (button, card, select, ...)
 │ └── index.css
 ├── CLAUDE.md # Instructions pour un LLM travaillant sur ce repo
