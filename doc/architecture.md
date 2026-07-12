@@ -96,19 +96,19 @@ natation/
 
 ```
 main.tsx
-└── App.tsx (QueryClientProvider > BrowserRouter > Routes)
-├── Home.tsx → useObjectifs/useSwimResults/useEntrainement (src/hooks/api.ts)
-└── Settings.tsx → PasswordGate puis ObjectifsEditor/PromptEditor/LastEntrainement
-│
-▼
-src/lib/api-client.ts (fetch + validation zod)
-│
-▼
-api/*.ts (fonctions Vercel, une par route HTTP)
-│
-▼
-server/composition.ts (storage, llm, activityProvider)
-│
-▼
-server/ports/*.port.ts ←implements— server/adapters/**/*.adapter.ts
+  └── App.tsx (QueryClientProvider > BrowserRouter > Routes)
+        ├── Home.tsx      → useObjectifs/useSwimResults/useEntrainement (src/hooks/api.ts)
+        └── Settings.tsx  → PasswordGate puis ObjectifsEditor/PromptEditor/LastEntrainement
+                                  │
+                                  ▼
+                          src/lib/api-client.ts (fetch + validation zod)
+                                  │
+                                  ▼
+                     api/*.ts (fonctions Vercel, une par route HTTP)
+                                  │
+                                  ▼
+                     server/composition.ts (storage, llm, activityProvider)
+                                  │
+                                  ▼
+              server/ports/*.port.ts  ←implements—  server/adapters/**/*.adapter.ts
 ```
