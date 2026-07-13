@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { DISTANCES, type Distance } from '@shared/domain';
 import { useEntrainement, useObjectifs, useSwimResults } from '@/hooks/api';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { DistanceBarChart } from '@/components/distance-bar-chart';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -68,9 +70,11 @@ export default function Home() {
           {entrainementQuery.isLoading ? (
             <p className="text-sm text-muted-foreground">Chargement…</p>
           ) : entrainementQuery.data ? (
-            <pre className="whitespace-pre-wrap font-sans text-sm">
-              {entrainementQuery.data.content}
-            </pre>
+            <div className="prose prose-sm dark:prose-invert max-w-none">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {entrainementQuery.data.content}
+              </ReactMarkdown>
+            </div>
           ) : (
             <p className="text-sm text-muted-foreground">
               Aucun entraînement généré pour le moment. Rends-toi dans les réglages pour en générer
