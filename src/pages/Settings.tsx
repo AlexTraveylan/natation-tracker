@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { DISTANCES, type Distance, type Objectifs } from '@shared/domain';
 import { formatTime, parseTime } from '@shared/format';
+import { RECORD_ATTEMPT_COEFFICIENT, getEffectiveTargetTimeSeconds } from '@shared/constants';
 import {
   useEntrainement,
   useGenerateEntrainement,
@@ -66,8 +67,7 @@ function ObjectifsEditor() {
     if (!objectifsQuery.data) return;
     const next = {} as Record<Distance, string>;
     for (const d of DISTANCES) {
-      const found = objectifsQuery.data.find((o) => o.distance === d);
-      next[d] = found ? formatTime(found.targetTimeSeconds) : '';
+      next[d] = formatTime(getEffectiveTargetTimeSeconds(d, objectifsQuery.data));
     }
     setValues(next);
   }, [objectifsQuery.data]);
@@ -109,6 +109,12 @@ function ObjectifsEditor() {
         <Button onClick={handleSave} disabled={setObjectifs.isPending} className="self-start">
           {setObjectifs.isPending ? 'Enregistrement…' : 'Enregistrer'}
         </Button>
+        <p className="text-sm text-muted-foreground">
+          Seules les tentatives sous {RECORD_ATTEMPT_COEFFICIENT}× l'objectif (soit +
+          {Math.round((RECORD_ATTEMPT_COEFFICIENT - 1) * 100)}&nbsp;%) sont affichées dans le
+          graphique de progression — les temps plus lents sont considérés comme de l'entraînement ou
+          de la récupération.
+        </p>
       </CardContent>
     </Card>
   );
