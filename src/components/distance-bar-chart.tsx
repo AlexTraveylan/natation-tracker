@@ -1,6 +1,7 @@
 import { Bar, BarChart, CartesianGrid, ReferenceLine, XAxis, YAxis } from 'recharts';
 import type { SwimResults } from '@shared/domain';
 import { formatTime } from '@shared/format';
+import { RECORD_ATTEMPT_COEFFICIENT } from '@shared/constants';
 import {
   ChartContainer,
   ChartTooltip,
@@ -17,13 +18,14 @@ const chartConfig = {
 
 interface DistanceBarChartProps {
   results: SwimResults;
-  objectifTimeSeconds?: number;
+  objectifTimeSeconds: number;
 }
 
 const MIN_PADDING_SECONDS = 2;
 
 export function DistanceBarChart({ results, objectifTimeSeconds }: DistanceBarChartProps) {
-  const data = [...results]
+  const data = results
+    .filter((r) => r.timeSeconds <= objectifTimeSeconds * RECORD_ATTEMPT_COEFFICIENT)
     .sort((a, b) => a.date.localeCompare(b.date))
     .map((r) => ({
       date: new Date(r.date).toLocaleDateString('fr-FR', {
@@ -41,9 +43,7 @@ export function DistanceBarChart({ results, objectifTimeSeconds }: DistanceBarCh
     );
   }
 
-  const values = data
-    .map((d) => d.temps)
-    .concat(objectifTimeSeconds !== undefined ? [objectifTimeSeconds] : []);
+  const values = data.map((d) => d.temps).concat([objectifTimeSeconds]);
   const min = Math.min(...values);
   const max = Math.max(...values);
   const padding = Math.max((max - min) * 0.1, MIN_PADDING_SECONDS);
@@ -63,19 +63,17 @@ export function DistanceBarChart({ results, objectifTimeSeconds }: DistanceBarCh
         <ChartTooltip
           content={<ChartTooltipContent formatter={(value) => formatTime(Number(value))} />}
         />
-        {objectifTimeSeconds !== undefined && (
-          <ReferenceLine
-            y={objectifTimeSeconds}
-            stroke="var(--destructive)"
-            strokeDasharray="4 4"
-            label={{
-              value: `Objectif : ${formatTime(objectifTimeSeconds)}`,
-              position: 'insideTopLeft',
-              fill: 'var(--destructive)',
-              fontSize: 12,
-            }}
-          />
-        )}
+        <ReferenceLine
+          y={objectifTimeSeconds}
+          stroke="var(--destructive)"
+          strokeDasharray="4 4"
+          label={{
+            value: `Objectif : ${formatTime(objectifTimeSeconds)}`,
+            position: 'insideTopLeft',
+            fill: 'var(--destructive)',
+            fontSize: 12,
+          }}
+        />
         <Bar dataKey="temps" fill="var(--color-temps)" radius={[4, 4, 0, 0]} />
       </BarChart>
     </ChartContainer>
