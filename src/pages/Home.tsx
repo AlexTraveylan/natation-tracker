@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { DISTANCES, type Distance } from '@shared/domain';
+import { getEffectiveTargetTimeSeconds } from '@shared/constants';
 import { useEntrainement, useObjectifs, useSwimResults } from '@/hooks/api';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -22,7 +23,7 @@ export default function Home() {
   const swimResultsQuery = useSwimResults();
   const entrainementQuery = useEntrainement();
 
-  const objectif = objectifsQuery.data?.find((o) => o.distance === distance);
+  const objectifTimeSeconds = getEffectiveTargetTimeSeconds(distance, objectifsQuery.data ?? []);
   const results = (swimResultsQuery.data ?? []).filter((r) => r.distance === distance);
 
   return (
@@ -57,7 +58,7 @@ export default function Home() {
           {swimResultsQuery.isLoading ? (
             <p className="text-sm text-muted-foreground">Chargement…</p>
           ) : (
-            <DistanceBarChart results={results} objectifTimeSeconds={objectif?.targetTimeSeconds} />
+            <DistanceBarChart results={results} objectifTimeSeconds={objectifTimeSeconds} />
           )}
         </CardContent>
       </Card>
